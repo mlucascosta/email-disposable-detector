@@ -19,7 +19,11 @@ if (!email) {
     console.log(chalk.green('\n✔ Resultado da validação:\n'));
     console.log(JSON.stringify(result, null, 2));
   } catch (error) {
-    console.error(chalk.red('\n❌ Erro ao validar o e-mail:'), error.message || error);
+    if (error instanceof Error) {
+      console.error(chalk.red('\n❌ Erro ao validar o e-mail:'), error.message);
+    } else {
+      console.error(chalk.red('\n❌ Erro ao validar o e-mail:'), String(error));
+    }
     process.exit(1);
   }
 })();

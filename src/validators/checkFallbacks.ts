@@ -49,7 +49,11 @@ export async function checkFallbacks(email: string): Promise<FallbackResult> {
       if (spam) results.spam = true;
       results.sources.push(service.name);
     } catch (err) {
-      console.warn(`[checkFallbacks] falha em ${service.name}:`, err.message);
+      if (err instanceof Error) {
+        console.warn(`[checkFallbacks] falha em ${service.name}:`, err.message);
+      } else {
+        console.warn(`[checkFallbacks] falha em ${service.name}:`, String(err));
+      }
     }
   }
 

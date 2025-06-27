@@ -21,3 +21,13 @@ docs/
 # Arquivos de build alternativos
 tsconfig.json
 vitest.config.ts
+
+
+node_modules/
+vitest.config.ts
+tsconfig.json
+.cli.ts
+.npmignore
+.gitignore
+README.md
+LICENSE
