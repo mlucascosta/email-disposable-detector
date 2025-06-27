@@ -1,39 +1,15 @@
 {
   "name": "email-disposable-detector",
-  "version": "1.0.1",
-  "description": "Valida e detecta e-mails descartáveis de forma gratuita, com múltiplas fontes e fallback inteligente.",
-  "main": "dist/src/core/validateEmailFull.js",
-  "types": "dist/types/src/core/validateEmailFull.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
-  "files": [
-    "dist",
-    "blocklists"
-  ],
+  "version": "2.0.1",
+  "description": "Valida e detecta e-mails descartáveis de forma gratuita, com múltiplas fontes.",
+  "main": "dist/index.js",
+  "types": "dist/types/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
-  "keywords": [
-    "email",
-    "validation",
-    "disposable",
-    "email-verifier",
-    "email-checker",
-    "typescript",
-    "superstruct",
-    "levenshtein",
-    "rdap",
-    "otm",
-    "verify-email",
-    "free-email-validator"
-  ],
+  "keywords": ["email", "validation", "disposable", "rdap", "otm", "typescript"],
   "type": "commonjs",
   "author": "Mario Costa",
   "license": "MIT",

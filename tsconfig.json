@@ -18,5 +18,5 @@
       "*": ["./src/*"]
     }
   },
-  "include": ["src", "cli.ts", "tests"]
+  "include": ["index.ts", "cli.ts", "tests"]
 }

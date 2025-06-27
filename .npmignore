@@ -1,5 +1,4 @@
 # Ignora arquivos de desenvolvimento
-src/
 tests/
 test/
 coverage/
@@ -27,6 +26,7 @@ node_modules/
 vitest.config.ts
 tsconfig.json
 .cli.ts
+index.ts
 .npmignore
 .gitignore
 README.md
