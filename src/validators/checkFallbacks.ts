@@ -1,45 +1,58 @@
 import axios from 'axios';
 
-type FallbackResponse = {
+export interface FallbackResult {
   disposable: boolean;
   spam: boolean;
-  mx: boolean | null;
-  domain_age_in_days: number | null;
-};
+  sources: string[];
+}
 
-const SERVICES = [
-  (email: string) => `https://www.disify.com/api/email/${email}`,
-  (email: string) => `https://disposable.debounce.io/?email=${email}`,
-  (email: string) => `https://rapid-email-verifier.fly.dev/api/validate?email=${email}`,
-  (email: string) => `https://www.validator.pizza/email/${email}`,
-  (email: string) => `https://api.disposable-email-detector.com/api/dea/v1/check/${email}`
-];
+export async function checkFallbacks(email: string): Promise<FallbackResult> {
+  const results: FallbackResult = {
+    disposable: false,
+    spam: false,
+    sources: [],
+  };
 
-export async function checkFallbacks(email: string): Promise<FallbackResponse> {
-  let disposable = false;
-  let spam = false;
-  let mx: boolean | null = null;
-  let domain_age_in_days: number | null = null;
+  const services = [
+    {
+      name: 'disify',
+      url: `https://www.disify.com/api/email/${email}`,
+      process: (data: any) => ({
+        disposable: data.disposable,
+        spam: data.spam || false,
+      }),
+    },
+    {
+      name: 'debounce',
+      url: `https://disposable.debounce.io/?email=${email}`,
+      process: (data: any) => ({
+        disposable: data.disposable === 'true',
+        spam: false,
+      }),
+    },
+    {
+      name: 'validator.pizza',
+      url: `https://www.validator.pizza/email/${email}`,
+      process: (data: any) => ({
+        disposable: data.disposable || false,
+        spam: false,
+      }),
+    },
+  ];
 
-  const checks = SERVICES.map(fn => {
-    const url = fn(email);
-    return axios.get(url, { timeout: 5000 }).then(res => res.data).catch(() => ({}));
-  });
+  for (const service of services) {
+    try {
+      const res = await axios.get(service.url, { timeout: 5000 });
+      const { disposable, spam } = service.process(res.data);
 
-  const results = await Promise.allSettled(checks);
-
-  for (const res of results) {
-    if (res.status === 'fulfilled') {
-      const data = res.value;
-      if (data?.disposable === true || data?.disposable === 'true') disposable = true;
-      if (data?.spam === true || data?.spam === 'true') spam = true;
-      if (data?.mx !== undefined && mx === null) mx = !!data.mx;
-      if (data?.domain_age !== undefined && domain_age_in_days === null) {
-        domain_age_in_days = parseInt(data.domain_age) || null;
-      }
+      if (disposable) results.disposable = true;
+      if (spam) results.spam = true;
+      results.sources.push(service.name);
+    } catch (err) {
+      console.warn(`[checkFallbacks] falha em ${service.name}:`, err.message);
     }
   }
 
-  return { disposable, spam, mx, domain_age_in_days };
+  return results;
 }
 

@@ -1,30 +1,23 @@
 import { distance } from 'fastest-levenshtein';
+import disposableList from '../blocklists/disposable_email_blocklist.json';
 
-const KNOWN_DOMAINS = [
-  'gmail.com',
-  'yahoo.com',
-  'hotmail.com',
-  'outlook.com',
-  'live.com',
-  'icloud.com',
-  'protonmail.com',
-  'aol.com',
-  'gmx.com',
-  'msn.com',
+const commonDomains = [
+  'gmail.com', 'hotmail.com', 'yahoo.com.br', 'uol.com.br',
+  'icloud.com', 'protonmail.com', 'outlook.com', 'live.com'
 ];
 
-export function suggestDomain(input: string, threshold = 2): string | null {
-  let suggestion: string | null = null;
-  let minDist = Infinity;
+export function suggestDomain(email: string): string | null {
+  const [_, domain] = email.split('@');
+  if (!domain) return null;
 
-  for (const known of KNOWN_DOMAINS) {
-    const dist = distance(input, known);
-    if (dist <= threshold && dist < minDist) {
-      minDist = dist;
-      suggestion = known;
+  let best = { domain: '', distance: Infinity };
+
+  for (const candidate of [...commonDomains, ...disposableList]) {
+    const d = distance(domain, candidate);
+    if (d < best.distance) {
+      best = { domain: candidate, distance: d };
     }
   }
 
-  return suggestion;
+  return best.distance <= 2 ? best.domain : null;
 }
-

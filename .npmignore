@@ -1,0 +1,23 @@
+# Ignora arquivos de desenvolvimento
+src/
+tests/
+test/
+coverage/
+.vscode/
+.idea/
+.env
+.env.*
+
+# Configurações e arquivos temporários
+*.log
+*.tsbuildinfo
+*.tgz
+
+# Documentação de desenvolvimento (mantém README e CHANGELOG)
+docs/
+!README.md
+!CHANGELOG.md
+
+# Arquivos de build alternativos
+tsconfig.json
+vitest.config.ts

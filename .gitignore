@@ -1,5 +1,34 @@
+# Node.js
 node_modules/
-dist/
-.env
-*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
 
+# TypeScript
+*.tsbuildinfo
+dist/
+
+# IDEs e editores
+.vscode/
+.idea/
+*.sw?
+*.swo
+
+# Testes
+coverage/
+test-results/
+.vitest/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos temporários
+*.log
+.env
+.env.*
+*.tgz
+
+# Build CLI temporário
+cli.js
